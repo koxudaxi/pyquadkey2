@@ -3,12 +3,18 @@
 # python3 setup.py sdist bdist_wheel
 # python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz
 # mkdocs build
+import platform
 
 from setuptools import Extension
 from setuptools import setup, find_packages
 
-with open('README.md', 'r') as fh:
+with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
+
+if platform.system() == "Windows":
+    ext_modules = None
+else:
+    ext_modules = [Extension('tilesystem', ['src/pyquadkey2/quadkey/tilesystem/tilesystem.c'])]
 
 setup(
     name='pyquadkey2',
@@ -40,6 +46,6 @@ setup(
     },
     keywords='tiling quadkey quadtile geospatial geohash',
     python_requires='>=3.6',
-    ext_modules=[Extension('tilesystem', ['src/pyquadkey2/quadkey/tilesystem/tilesystem.c'])],
+    ext_modules=ext_modules,
     ext_package='pyquadkey2'
 )
